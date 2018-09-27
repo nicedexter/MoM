@@ -1,0 +1,10 @@
+.graph {
+  min-width: 300px;
+  min-height: 500px;
+  width: 1000px;
+  height: 1000px;
+}
+
+.selected {
+  background-color: cornflowerblue;
+}
