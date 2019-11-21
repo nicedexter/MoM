@@ -1,6 +1,6 @@
 // tslint:disable:no-console
 import React, { Component } from "react";
-import { ReactCytoscape, cytoscape } from "react-cytoscape";
+import { ReactCytoscape } from "react-cytoscape";
 import {
   Grid,
   Row,
@@ -22,7 +22,10 @@ class Graph extends Component {
         { data: { id: "eb", source: "e", target: "b" } }
       ],
       nodes: [
-        { data: { id: "a", parent: "b" }, position: { x: 215, y: 85 } },
+        {
+          data: { id: "a", parent: "b" },
+          position: { x: 215, y: 85 }
+        },
         { data: { id: "b" } },
         { data: { id: "c", parent: "b" }, position: { x: 300, y: 85 } },
         { data: { id: "d" }, position: { x: 215, y: 175 } },
@@ -31,6 +34,11 @@ class Graph extends Component {
       ]
     }
   };
+
+  constructor() {
+    super();
+    this.tappedNodes = undefined;
+  }
 
   render() {
     const { elements } = this.state;
@@ -46,12 +54,31 @@ class Graph extends Component {
               }}
               cytoscapeOptions={{ wheelSensitivity: 0.1 }}
               layout={{ name: "dagre" }}
-            />
-          </Col>
-        </Row>
+              style={[
+                {
+                  selector: "node",
+                  style: {
+                    label: "data(id)",
+                    "text-halign": "center",
+                    "text-valign": "center",
+                    width: "label"
+                  }
+                }
+                // {
+                //   selector: "edge",
+                //   style: {
+                //     label: "data(label)" // maps to data.label
+                //   }
+                // }
+              ]}
+            />{" "}
+          </Col>{" "}
+        </Row>{" "}
       </Grid>
     );
   }
+
+  tappedNodes = undefined;
 
   handleTap(event) {
     console.log("handleTap", event.type);
@@ -60,7 +87,9 @@ class Graph extends Component {
 
     if (target === cy) {
       const newNode = {
-        data: { id: Math.round(Math.random() * 100000) },
+        data: {
+          id: Math.round(Math.random() * 100000)
+        },
         group: "nodes",
         position: event.position
       };
@@ -68,7 +97,22 @@ class Graph extends Component {
     } else if (target.isEdge()) {
       cy.remove(target);
     } else if (target.isNode()) {
-      console.log(target);
+      if (!this.tappedNodes) {
+        this.tappedNodes = cy.collection();
+      }
+      this.tappedNodes.add(target);
+      console.log(this.tappedNodes);
+
+      if (this.tappedNodes.length === 1) {
+        const s = this.tappedNodes[0].id();
+        const t = this.tappedNodes[1].id();
+        const id = `${s}${t}`;
+        cy.add({
+          data: { id, source: s, target: t, label: id },
+          group: "edges"
+        });
+        this.tappedNodes = undefined;
+      }
     }
   }
 
@@ -94,7 +138,7 @@ class Graph extends Component {
           Math.pow(p1.x - p.x, 2) + Math.pow(p1.y - p.y, 2),
           2
         );
-        n.data("distance", distance);
+        n.data("distance", distance); // TODO: n.scratch
       });
 
       const { ele } = nodes
@@ -123,7 +167,7 @@ class Graph extends Component {
         cy.remove(edges.shift());
       } else {
         cy.add({
-          data: { id, source: s, target: t },
+          data: { id, source: s, target: t, label: id },
           group: "edges"
         });
       }
@@ -152,3 +196,4 @@ class Graph extends Component {
 }
 
 export default Graph;
+
