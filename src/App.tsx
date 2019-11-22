@@ -1,16 +1,7 @@
 import * as React from "react";
-
 import "./App.css";
-import Graph from "./Graph";
 
-class App extends React.Component {
-  public render() {
-    return (
-      <div className="App">
-        <Graph />
-      </div>
-    );
-  }
-}
+import "bootstrap/dist/css/bootstrap.min.css";
+import Tree from "./Visualization/Tree";
 
-export default App;
+export default () => <Tree />;
