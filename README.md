@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Your mother in a graph network
 
-### Next
+### Next features
 
 - Graph editor
 - Visualization
