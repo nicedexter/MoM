@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 export interface Node {
   id: string;
+  parent: string | null;
   text: string;
   isCompleted: boolean;
 }
@@ -36,6 +37,7 @@ const NodeFormComponent = (props: NodeForm) => {
     if (event.key === "Enter") {
       const newNode: Node = {
         id: shortid.generate(),
+        parent: null,
         text: formState,
         isCompleted: false
       };
@@ -53,7 +55,7 @@ const NodeFormComponent = (props: NodeForm) => {
       <input
         ref={inputRef}
         type="text"
-        placeholder="Enter new node"
+        placeholder="New node"
         onChange={event => handleInputChange(event)}
         onKeyPress={event => handleInputEnter(event)}
       />

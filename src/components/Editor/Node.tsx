@@ -3,18 +3,19 @@ import * as React from "react";
 import { Node } from "./Form";
 import styled from "styled-components";
 
-interface NodeFormInterface {
+interface NodeActions {
   handleNodeUpdate: (
     event: React.ChangeEvent<HTMLInputElement>,
     id: string
   ) => void;
+  handleNodeAddSubNode: (id: string) => void;
   handleNodeRemove: (id: string) => void;
   handleNodeComplete: (id: string) => void;
   handleNodeBlur: (event: React.ChangeEvent<HTMLInputElement>) => void;
   node: Node;
 }
 
-const NodeFormContainer = styled.div`
+const NodeContainer = styled.div`
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
@@ -63,6 +64,17 @@ const NodeFormContainer = styled.div`
     border: 0;
   }
 
+  .add {
+    display: flex;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 28px;
+    cursor: pointer;
+    line-height: 1;
+    color: #ececec;
+    transition: 0.25s color ease-in-out;
+  }
+
   .remove {
     display: flex;
     padding-left: 8px;
@@ -77,11 +89,15 @@ const NodeFormContainer = styled.div`
   .remove:hover {
     color: #111;
   }
+
+  .input-error {
+    border-bottom: 1px solid red;
+  }
 `;
 
-const NodeComponent = (props: NodeFormInterface) => {
+const NodeComponent = (props: NodeActions) => {
   return (
-    <NodeFormContainer>
+    <NodeContainer>
       <div onClick={() => props.handleNodeComplete(props.node.id)}>
         {props.node.isCompleted ? (
           <span className="checked">&#x2714;</span>
@@ -101,12 +117,19 @@ const NodeComponent = (props: NodeFormInterface) => {
       </div>
 
       <div
+        className="add"
+        onClick={() => props.handleNodeAddSubNode(props.node.id)}
+      >
+        &#x02937;
+      </div>
+
+      <div
         className="remove"
         onClick={() => props.handleNodeRemove(props.node.id)}
       >
         &#x02A2F;
       </div>
-    </NodeFormContainer>
+    </NodeContainer>
   );
 };
 
