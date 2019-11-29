@@ -11,23 +11,20 @@ const Container = styled.div`
   height: 100%;
 
   .__________cytoscape_container {
-    width: calc(100%);
-    height: calc(100%);
+    width: calc(100% - 32px);
+    height: calc(100% - 32px);
     border: 0;
     position: fixed;
   }
 `;
 
 const elements = [
-  {
-    data: { id: "a", parent: "b" },
-    position: { x: 215, y: 85 }
-  },
+  { data: { id: "a", parent: "b" } },
   { data: { id: "b" } },
-  { data: { id: "c", parent: "b" }, position: { x: 300, y: 85 } },
-  { data: { id: "d" }, position: { x: 215, y: 175 } },
+  { data: { id: "c", parent: "b" } },
+  { data: { id: "d" } },
   { data: { id: "e" } },
-  { data: { id: "f", parent: "e" }, position: { x: 300, y: 175 } },
+  { data: { id: "f", parent: "e" } },
   { data: { id: "ad", source: "a", target: "d" } },
   { data: { id: "eb", source: "e", target: "b" } }
 ];

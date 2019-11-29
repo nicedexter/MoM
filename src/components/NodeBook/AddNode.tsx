@@ -6,10 +6,10 @@ export interface Node {
   id: string;
   parent: string | null;
   text: string;
-  isCompleted: boolean;
+  complete: boolean;
 }
 
-const NodeInputContainer = styled.div`
+const AddNodeContainer = styled.div`
   input {
     border: 1px solid #ccc;
   }
@@ -24,7 +24,7 @@ export interface NodeInput {
   handleNodeCreate: (node: Node) => void;
 }
 
-const NodeInputComponent = (props: NodeInput) => {
+const AddNodeComponent = (props: NodeInput) => {
   const [text, setText] = React.useState("");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +37,7 @@ const NodeInputComponent = (props: NodeInput) => {
         id: shortid.generate(),
         parent: null,
         text: text,
-        isCompleted: false
+        complete: false
       };
       props.handleNodeCreate(newNode);
     }
@@ -47,7 +47,7 @@ const NodeInputComponent = (props: NodeInput) => {
   };
 
   return (
-    <NodeInputContainer>
+    <AddNodeContainer>
       <input
         value={text}
         type="text"
@@ -55,8 +55,8 @@ const NodeInputComponent = (props: NodeInput) => {
         onChange={event => handleInputChange(event)}
         onKeyPress={event => event.key === "Enter" && handleInputEnter(event)}
       />
-    </NodeInputContainer>
+    </AddNodeContainer>
   );
 };
 
-export default NodeInputComponent;
+export default AddNodeComponent;

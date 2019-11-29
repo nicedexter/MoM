@@ -1,12 +1,12 @@
 import React, { useReducer } from "react";
-import { Node } from "./Editor/Input";
+import { Node } from "./AddNode";
 import shortid from "shortid";
 
 export enum Actions {
   ADD,
   UPDATE,
   REMOVE,
-  COMPLETE
+  TOGGLE_COMPLETE
 }
 
 export interface Action {
@@ -19,7 +19,7 @@ export const nodeTemplate = (): Node => ({
   id: shortid.generate(),
   parent: null,
   text: "New node",
-  isCompleted: false
+  complete: false
 });
 
 export const initialNodes: Node[] = [nodeTemplate()];
@@ -30,26 +30,22 @@ export const nodeReducer = (state: Node[], action: Action): Node[] => {
       return action.node ? [action.node, ...state] : state;
     case Actions.REMOVE:
       return state.filter((node: Node) => node.id !== action.id);
-    case Actions.UPDATE: {
-      const newNodesState = [...state];
+    case Actions.UPDATE: 
+      return state.map(node => {
+        if (node.id === action.id) {
+          return { ...node, ...action.node }
+        }
 
-      if (action.node) {
-        newNodesState.find(
-          todo => action.node && todo.id === action.node.id
-        )!.text = action.node.text;
+        return node
+      }) 
+    case Actions.TOGGLE_COMPLETE: 
+    return state.map(node => {
+      if (node.id === action.id) {
+        return { ...node, complete: !node.complete}
       }
 
-      return newNodesState;
-    }
-    case Actions.COMPLETE: {
-      const newNodesState = [...state];
-      newNodesState.find(
-        todo => todo.id === action.id
-      )!.isCompleted = !newNodesState.find(todo => todo.id === action.id)!
-        .isCompleted;
-
-      return newNodesState;
-    }
+      return node
+    }) 
     default:
       throw new Error();
   }

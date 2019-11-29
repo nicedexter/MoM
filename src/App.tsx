@@ -1,8 +1,9 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import * as React from "react";
 import { createGlobalStyle } from "styled-components";
-import Editor from "./components/Editor";
+import NodeBook from "./components/NodeBook/index";
 import Tree from "./components/Visualization/Tree";
+import styled from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   html {
@@ -25,10 +26,14 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const AppBox = styled.div`
+  display: flex;
+`;
+
 export default () => (
-  <>
+  <AppBox>
     <GlobalStyle />
-    <Editor />
+    <NodeBook />
     <Tree />
-  </>
+  </AppBox>
 );

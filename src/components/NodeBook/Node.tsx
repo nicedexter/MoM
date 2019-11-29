@@ -1,6 +1,6 @@
 // Import dependencies
 import * as React from "react";
-import { Node } from "./Input";
+import { Node } from "./AddNode";
 import styled from "styled-components";
 
 interface NodeActions {
@@ -111,7 +111,7 @@ const NodeComponent = (props: NodeActions) => {
   return (
     <NodeContainer>
       <div onClick={() => props.handleNodeComplete(props.node.id)}>
-        {props.node.isCompleted ? (
+        {props.node.complete ? (
           <span className="checked">&#x2714;</span>
         ) : (
           <span className="unchecked" />
