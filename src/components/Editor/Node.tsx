@@ -1,17 +1,13 @@
 // Import dependencies
 import * as React from "react";
-import { Node } from "./Form";
+import { Node } from "./Input";
 import styled from "styled-components";
 
 interface NodeActions {
-  handleNodeUpdate: (
-    event: React.ChangeEvent<HTMLInputElement>,
-    id: string
-  ) => void;
+  handleNodeUpdate: (node: Node) => void;
   handleNodeAddSubNode: (id: string) => void;
   handleNodeRemove: (id: string) => void;
   handleNodeComplete: (id: string) => void;
-  handleNodeBlur: (event: React.ChangeEvent<HTMLInputElement>) => void;
   node: Node;
 }
 
@@ -95,7 +91,23 @@ const NodeContainer = styled.div`
   }
 `;
 
+const handleNodeBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
+  if (event.target.value.length === 0) {
+    event.target.classList.add("input-error");
+  } else {
+    event.target.classList.remove("input-error");
+  }
+};
+
 const NodeComponent = (props: NodeActions) => {
+  const handleNodeUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nextNode = {
+      ...props.node,
+      text: event.currentTarget.value
+    };
+    props.handleNodeUpdate(nextNode);
+  };
+
   return (
     <NodeContainer>
       <div onClick={() => props.handleNodeComplete(props.node.id)}>
@@ -109,10 +121,8 @@ const NodeComponent = (props: NodeActions) => {
       <div className="wrapper">
         <input
           value={props.node.text}
-          onBlur={props.handleNodeBlur}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            props.handleNodeUpdate(event, props.node.id)
-          }
+          onBlur={handleNodeBlur}
+          onChange={handleNodeUpdate}
         />
       </div>
 

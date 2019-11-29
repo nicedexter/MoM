@@ -9,7 +9,7 @@ export interface Node {
   isCompleted: boolean;
 }
 
-const NodeFormContainer = styled.div`
+const NodeInputContainer = styled.div`
   input {
     border: 1px solid #ccc;
   }
@@ -20,47 +20,43 @@ const NodeFormContainer = styled.div`
   }
 `;
 
-export interface NodeForm {
-  nodes: Node[];
+export interface NodeInput {
   handleNodeCreate: (node: Node) => void;
 }
 
-const NodeFormComponent = (props: NodeForm) => {
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const [formState, setFormState] = React.useState("");
+const NodeInputComponent = (props: NodeInput) => {
+  const [text, setText] = React.useState("");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormState(event.target.value);
+    setText(event.target.value);
   };
 
   const handleInputEnter = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter") {
+    if (text) {
       const newNode: Node = {
         id: shortid.generate(),
         parent: null,
-        text: formState,
+        text: text,
         isCompleted: false
       };
-
       props.handleNodeCreate(newNode);
-
-      if (inputRef && inputRef.current) {
-        inputRef.current.value = "";
-      }
     }
+    
+    setText("");
+    event.preventDefault();
   };
 
   return (
-    <NodeFormContainer>
+    <NodeInputContainer>
       <input
-        ref={inputRef}
+        value={text}
         type="text"
         placeholder="New node"
         onChange={event => handleInputChange(event)}
-        onKeyPress={event => handleInputEnter(event)}
+        onKeyPress={event => event.key === "Enter" && handleInputEnter(event)}
       />
-    </NodeFormContainer>
+    </NodeInputContainer>
   );
 };
 
-export default NodeFormComponent;
+export default NodeInputComponent;

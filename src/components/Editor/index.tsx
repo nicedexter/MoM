@@ -1,9 +1,14 @@
-import * as React from "react";
+import React, { useReducer } from "react";
 import styled from "styled-components";
-import shortid from "shortid";
 
-import NodeFormComponent, { Node } from "./Form";
+import NodeInputComponent, { Node } from "./Input";
 import NodeComponent from "./Node";
+import {
+  Actions,
+  nodeReducer,
+  nodeTemplate,
+  initialNodes
+} from "../NodeContext";
 
 const NodeEditorContainer = styled.div`
   padding-top: 32px;
@@ -30,98 +35,68 @@ const ElementsContainer = styled.div`
 `;
 
 const NodeEditor = () => {
-  const [nodes, setNodes] = React.useState<Node[]>([]);
+  const [nodes, dispatchNodes] = useReducer(nodeReducer, initialNodes);
 
   const handleNodeCreate = (node: Node) => {
-    const newNodesState = [...nodes];
-    newNodesState.push(node);
-
-    setNodes(newNodesState);
+    dispatchNodes({ type: Actions.ADD, node });
   };
 
-  const handleNodeUpdate = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    id: string
-  ) => {
-    const newNodesState = [...nodes];
-    newNodesState.find(todo => todo.id === id)!.text = event.target.value;
-
-    setNodes(newNodesState);
+  const handleNodeUpdate = (node: Node) => {
+    dispatchNodes({ type: Actions.UPDATE, node });
   };
 
   const handleNodeRemove = (id: string) => {
-    const newNodesState = nodes.filter(todo => todo.id !== id);
-
-    setNodes(newNodesState);
+    dispatchNodes({ type: Actions.REMOVE, id });
   };
 
   const handleNodeComplete = (id: string) => {
-    const newNodesState = [...nodes];
-    newNodesState.find(
-      todo => todo.id === id
-    )!.isCompleted = !newNodesState.find(todo => todo.id === id)!.isCompleted;
-
-    setNodes(newNodesState);
-  };
-
-  const handleNodeBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value.length === 0) {
-      event.target.classList.add("input-error");
-    } else {
-      event.target.classList.remove("input-error");
-    }
+    dispatchNodes({ type: Actions.COMPLETE, id });
   };
 
   const handleNodeAddSubNode = (id: string) => {
     const newNode: Node = {
-      id: shortid.generate(),
-      parent: id,
-      text: "",
-      isCompleted: false
+      ...nodeTemplate(),
+      parent: id
     };
-    const newNodesState = [...nodes];
-    newNodesState.push(newNode);
-
-    setNodes(newNodesState);
+    dispatchNodes({ type: Actions.ADD, node: newNode });
   };
 
   const rootNodes = nodes.filter(n => n.parent === null);
   const childNodes = (id: string): Node[] =>
-    (nodes.filter(n => n.parent === id)) || [];
+    nodes.filter(n => n.parent === id) || [];
 
   return (
     <NodeEditorContainer>
-      <NodeFormComponent nodes={nodes} handleNodeCreate={handleNodeCreate} />
+      <NodeInputComponent handleNodeCreate={handleNodeCreate} />
 
       <ElementsContainer>
         <ul>
-          {rootNodes.map(node => (
-            <li key={node.id}>
-              <NodeComponent
-                node={node}
-                handleNodeUpdate={handleNodeUpdate}
-                handleNodeAddSubNode={handleNodeAddSubNode}
-                handleNodeRemove={handleNodeRemove}
-                handleNodeComplete={handleNodeComplete}
-                handleNodeBlur={handleNodeBlur}
-              />
-              {childNodes(node.id) &&
-                childNodes(node.id).map(node => (
-                  <ul>
-                    <li key={node.id}>
-                      <NodeComponent
-                        node={node}
-                        handleNodeUpdate={handleNodeUpdate}
-                        handleNodeAddSubNode={handleNodeAddSubNode}
-                        handleNodeRemove={handleNodeRemove}
-                        handleNodeComplete={handleNodeComplete}
-                        handleNodeBlur={handleNodeBlur}
-                      />
-                    </li>
-                  </ul>
-                ))}
-            </li>
-          ))}
+          {nodes &&
+            rootNodes.map(node => (
+              <li key={node.id}>
+                <NodeComponent
+                  node={node}
+                  handleNodeUpdate={handleNodeUpdate}
+                  handleNodeAddSubNode={handleNodeAddSubNode}
+                  handleNodeRemove={handleNodeRemove}
+                  handleNodeComplete={handleNodeComplete}
+                />
+                {childNodes(node.id) &&
+                  childNodes(node.id).map(node => (
+                    <ul>
+                      <li key={node.id}>
+                        <NodeComponent
+                          node={node}
+                          handleNodeUpdate={handleNodeUpdate}
+                          handleNodeAddSubNode={handleNodeAddSubNode}
+                          handleNodeRemove={handleNodeRemove}
+                          handleNodeComplete={handleNodeComplete}
+                        />
+                      </li>
+                    </ul>
+                  ))}
+              </li>
+            ))}
         </ul>
       </ElementsContainer>
     </NodeEditorContainer>
