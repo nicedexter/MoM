@@ -6,7 +6,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ### Next features
 
-- Graph editor
+- Graph editor (mimic Tasks)
+  - x localstorage
+  - Top nodes switch
 - Visualization
   - Implement gestures
     - handleTap

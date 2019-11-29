@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useContext } from "react";
+import styled from "styled-components";
 
-import { Node } from './AddNode';
-import NodeComponent from './Node';
-import { Action, Actions, nodeTemplate } from './NodeContext';
+import { Node } from "./AddNode";
+import NodeComponent from "./Node";
+import { Actions, NodeContext, nodeTemplate } from "../State/NodeContext";
 
 const NodeEditorContainer = styled.div`
   padding-top: 32px;
@@ -29,27 +29,20 @@ const ElementsContainer = styled.div`
   }
 `;
 
-const NodeEditor = ({
-  nodes,
-  dispatch
-}: {
-  nodes: Node[];
-  dispatch: React.Dispatch<Action>;
-}) => {
-  const handleNodeCreate = (node: Node) => {
-    dispatch({ type: Actions.ADD, node });
-  };
+const NodeEditor = ({ nodes }: { nodes: Node[] | null}) => {
+  const context = useContext(NodeContext);
+  const dispatch = context && context.dispatch;
 
   const handleNodeUpdate = (node: Node) => {
-    dispatch({ type: Actions.UPDATE, id: node.id, node });
+    dispatch && dispatch({ type: Actions.UPDATE, id: node.id, node });
   };
 
   const handleNodeRemove = (id: string) => {
-    dispatch({ type: Actions.REMOVE, id });
+    dispatch && dispatch({ type: Actions.REMOVE, id });
   };
 
   const handleNodeToggleComplete = (id: string) => {
-    dispatch({ type: Actions.TOGGLE_COMPLETE, id });
+    dispatch && dispatch({ type: Actions.TOGGLE_COMPLETE, id });
   };
 
   const handleNodeAddSubNode = (id: string) => {
@@ -57,18 +50,18 @@ const NodeEditor = ({
       ...nodeTemplate(),
       parent: id
     };
-    dispatch({ type: Actions.ADD, node: newNode });
+    dispatch && dispatch({ type: Actions.ADD, node: newNode });
   };
 
-  const rootNodes = nodes.filter(n => n.parent === null);
+  const rootNodes = nodes && nodes.filter((n: Node) => n.parent === null);
   const childNodes = (id: string): Node[] =>
-    nodes.filter(n => n.parent === id) || [];
+  nodes &&  nodes.filter((n: Node) => n.parent === id) || [];
 
   return (
     <ElementsContainer>
       <ul>
-        {nodes &&
-          rootNodes.map(node => (
+        {rootNodes &&
+          rootNodes.map((node: Node) => (
             <li key={node.id}>
               <NodeComponent
                 node={node}
@@ -78,7 +71,7 @@ const NodeEditor = ({
                 handleNodeComplete={handleNodeToggleComplete}
               />
               {childNodes(node.id) &&
-                childNodes(node.id).map(node => (
+                childNodes(node.id).map((node: Node) => (
                   <ul>
                     <li key={node.id}>
                       <NodeComponent

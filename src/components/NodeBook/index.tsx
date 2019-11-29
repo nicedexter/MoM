@@ -1,11 +1,11 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useContext } from "react";
 import styled from "styled-components";
 
 import AddNode, { Node } from "./AddNode";
 import Filter from "./Filter";
-import { filterReducer, FilterState } from "./FilterReducer";
+import { filterReducer, FilterState } from "../State/FilterReducer";
 import List from "./List";
-import { Actions, initialNodes, nodeReducer } from "./NodeContext";
+import { Action, Actions, NodeContext } from "../State/NodeContext";
 
 const NodeEditorContainer = styled.div`
   padding-top: 32px;
@@ -17,30 +17,39 @@ const NodeEditorContainer = styled.div`
 `;
 
 const NodeBook = () => {
-  const [nodes, dispatchNodes] = useReducer(nodeReducer, initialNodes);
+  let nodes: Node[] | null;
+  let dispatch: React.Dispatch<Action> | null;
+
+  const context = useContext(NodeContext);
+  nodes = context && context.nodes;
+  dispatch = context && context.dispatch;
+
   const [filter, dispatchFilter] = useReducer(filterReducer, FilterState.ALL);
 
   const handleNodeCreate = (node: Node) => {
-    dispatchNodes({ type: Actions.ADD, node });
+    dispatch && dispatch({ type: Actions.ADD, node });
   };
 
-  const filteredNodes = nodes.filter(node =>
-    filter === FilterState.ALL ||
-    (filter === FilterState.COMPLETED && node.complete) ||
-    (filter === FilterState.INCOMPLETED && !node.complete)
-      ? true
-      : false
-  );
+  const filteredNodes =
+    nodes &&
+    nodes.filter(node =>
+      filter === FilterState.ALL ||
+      (filter === FilterState.COMPLETED && node.complete) ||
+      (filter === FilterState.INCOMPLETED && !node.complete)
+        ? true
+        : false
+    );
 
-  const rootNodes = filteredNodes.filter(n => n.parent === null);
+  const rootNodes =
+    filteredNodes && filteredNodes.filter(n => n.parent === null);
   const childNodes = (id: string): Node[] =>
-    filteredNodes.filter(n => n.parent === id) || [];
+    (filteredNodes && filteredNodes.filter(n => n.parent === id)) || [];
 
   return (
     <NodeEditorContainer>
       <Filter dispatch={dispatchFilter} />
       <AddNode handleNodeCreate={handleNodeCreate} />
-      <List dispatch={dispatchNodes} nodes={filteredNodes} />
+      <List nodes={filteredNodes} />
     </NodeEditorContainer>
   );
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { FilterAction } from "./FilterReducer";
+import { FilterAction } from "../State/FilterReducer";
 import styled from "styled-components";
 
 const FilterContainer = styled.div`

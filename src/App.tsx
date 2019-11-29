@@ -1,9 +1,10 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import * as React from "react";
+import React, { useReducer } from "react";
 import { createGlobalStyle } from "styled-components";
 import NodeBook from "./components/NodeBook/index";
 import Tree from "./components/Visualization/Tree";
 import styled from "styled-components";
+import { NodeProvider } from "./components/State/NodeContext";
 
 const GlobalStyle = createGlobalStyle`
   html {
@@ -31,9 +32,11 @@ const AppBox = styled.div`
 `;
 
 export default () => (
-  <AppBox>
-    <GlobalStyle />
-    <NodeBook />
-    <Tree />
-  </AppBox>
+  <NodeProvider>
+    <AppBox>
+      <GlobalStyle />
+      <NodeBook />
+      <Tree />
+    </AppBox>
+  </NodeProvider>
 );
