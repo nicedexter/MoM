@@ -1,10 +1,8 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import React, { useReducer } from "react";
-import { createGlobalStyle } from "styled-components";
+import React from "react";
+import styled, { createGlobalStyle } from "styled-components";
 import NodeBook from "./components/NodeBook/index";
-import Tree from "./components/Visualization/Tree";
-import styled from "styled-components";
 import { NodeProvider } from "./components/State/NodeContext";
+import Tree from "./components/Visualization/Tree";
 
 const GlobalStyle = createGlobalStyle`
   html {

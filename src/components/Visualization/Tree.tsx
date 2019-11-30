@@ -1,10 +1,15 @@
 import Cytoscape from "cytoscape";
 import LayoutPlugin from "cytoscape-dagre";
-import React from "react";
+import React, { useContext } from "react";
 import CytoscapeComponent from "react-cytoscapejs";
 import styled from "styled-components";
+import { Action, Actions, NodeContext } from "../State/NodeContext";
 
 Cytoscape.use(LayoutPlugin);
+
+interface Element {
+  data: { id: string; parent?: string; source?: string; target?: string };
+}
 
 const Container = styled.div`
   width: 100%;
@@ -18,7 +23,7 @@ const Container = styled.div`
   }
 `;
 
-const elements = [
+const elements: Element[] = [
   { data: { id: "a", parent: "b" } },
   { data: { id: "b" } },
   { data: { id: "c", parent: "b" } },
@@ -50,12 +55,23 @@ const stylesheet = [
 
 const layout = { name: "dagre" };
 
-export default () => (
-  <Container>
-    <CytoscapeComponent
-      elements={elements}
-      layout={layout}
-      stylesheet={stylesheet}
-    />
-  </Container>
-);
+export default () => {
+  const context = useContext(NodeContext);
+  const nodes = context && context.nodes;
+  const dispatch = context && context.dispatch;
+
+  const els: Element[] | null =
+    nodes &&
+    nodes.map(node => ({
+      data: { id: node.text }
+    }));
+  return (
+    <Container>
+      <CytoscapeComponent
+        elements={els}
+        layout={layout}
+        stylesheet={stylesheet}
+      />
+    </Container>
+  );
+};

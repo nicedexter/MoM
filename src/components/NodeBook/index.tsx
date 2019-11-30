@@ -17,12 +17,9 @@ const NodeEditorContainer = styled.div`
 `;
 
 const NodeBook = () => {
-  let nodes: Node[] | null;
-  let dispatch: React.Dispatch<Action> | null;
-
   const context = useContext(NodeContext);
-  nodes = context && context.nodes;
-  dispatch = context && context.dispatch;
+  const nodes = context && context.nodes;
+  const dispatch = context && context.dispatch;
 
   const [filter, dispatchFilter] = useReducer(filterReducer, FilterState.ALL);
 

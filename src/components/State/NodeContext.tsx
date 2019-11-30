@@ -20,9 +20,9 @@ export interface NodeContext {
   dispatch: React.Dispatch<Action>;
 }
 
-export const nodeTemplate = (): Node => ({
+export const nodeTemplate = (parent: string | null = null): Node => ({
   id: shortid.generate(),
-  parent: null,
+  parent,
   text: "New node",
   complete: false
 });
