@@ -1,40 +1,16 @@
-import React from "react";
-import styled, { createGlobalStyle } from "styled-components";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import NodeBook from "./components/NodeBook/index";
 import { NodeProvider } from "./components/State/NodeContext";
-import Tree from "./components/Visualization/Tree";
+import Layout from "./components/Layout";
 
-const GlobalStyle = createGlobalStyle`
-  html {
-    box-sizing: border-box;
-  }
-
-  *,
-  *::before,
-  *::after {
-    box-sizing: inherit;
-  }
-
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-    width: 100%;
-    height: 100%;
-    min-height: 100vh;
-  }
-`;
-
-const AppBox = styled.div`
-  display: flex;
-`;
+import React, { memo } from "react";
+import { AppBar, Toolbar, Typography, Paper } from "@material-ui/core";
 
 export default () => (
-  <NodeProvider>
-    <AppBox>
-      <GlobalStyle />
+  <Layout>
+    <NodeProvider>
       <NodeBook />
-      <Tree />
-    </AppBox>
-  </NodeProvider>
+      {/* <Tree /> */}
+    </NodeProvider>
+  </Layout>
 );

@@ -2,7 +2,6 @@ import Cytoscape from "cytoscape";
 import LayoutPlugin from "cytoscape-dagre";
 import React, { useContext } from "react";
 import CytoscapeComponent from "react-cytoscapejs";
-import styled from "styled-components";
 import { Action, Actions, NodeContext } from "../State/NodeContext";
 
 Cytoscape.use(LayoutPlugin);
@@ -11,17 +10,17 @@ interface Element {
   data: { id: string; parent?: string; source?: string; target?: string };
 }
 
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
+// const Container = styled.div`
+//   width: 100%;
+//   height: 100%;
 
-  .__________cytoscape_container {
-    width: calc(100% - 32px);
-    height: calc(100% - 32px);
-    border: 0;
-    position: fixed;
-  }
-`;
+//   .__________cytoscape_container {
+//     width: calc(100% - 32px);
+//     height: calc(100% - 32px);
+//     border: 0;
+//     position: fixed;
+//   }
+// `;
 
 const elements: Element[] = [
   { data: { id: "a", parent: "b" } },
@@ -66,12 +65,12 @@ export default () => {
       data: { id: node.text }
     }));
   return (
-    <Container>
+    <>
       <CytoscapeComponent
         elements={els}
         layout={layout}
         stylesheet={stylesheet}
       />
-    </Container>
+    </>
   );
 };

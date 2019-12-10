@@ -1,7 +1,13 @@
 // Import dependencies
+import Checkbox from "@material-ui/core/Checkbox";
+import IconButton from "@material-ui/core/IconButton";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import TextField from "@material-ui/core/TextField";
+import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
 import * as React from "react";
 import { Node } from "./AddNode";
-import styled from "styled-components";
 
 interface NodeActions {
   handleNodeUpdate: (node: Node) => void;
@@ -10,86 +16,6 @@ interface NodeActions {
   handleNodeComplete: (id: string) => void;
   node: Node;
 }
-
-const NodeContainer = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  padding: 8px;
-
-  .wrapper {
-    flex-grow: 1;
-    padding: 0 16px;
-  }
-
-  input {
-    width: 100%;
-    border: 0;
-    border-bottom: 1px solid transparent;
-    transition: 0.25s border-bottom ease-in-out;
-  }
-
-  input:focus {
-    outline: 0;
-    border-bottom: 1px solid #007bff;
-  }
-
-  span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 0;
-    transition: 0.25s all ease-in-out;
-  }
-
-  .unchecked {
-    border: 1px solid #ececec;
-  }
-
-  .unchecked:hover {
-    background: #28a745;
-    border: 1px solid #ccc;
-  }
-
-  .checked {
-    color: #fff;
-    background: #28a745;
-    border: 0;
-  }
-
-  .add {
-    display: flex;
-    padding-left: 8px;
-    padding-right: 8px;
-    font-size: 28px;
-    cursor: pointer;
-    line-height: 1;
-    color: #ececec;
-    transition: 0.25s color ease-in-out;
-  }
-
-  .remove {
-    display: flex;
-    padding-left: 8px;
-    padding-right: 8px;
-    font-size: 28px;
-    cursor: pointer;
-    line-height: 1;
-    color: #ececec;
-    transition: 0.25s color ease-in-out;
-  }
-
-  .remove:hover {
-    color: #111;
-  }
-
-  .input-error {
-    border-bottom: 1px solid red;
-  }
-`;
 
 const handleNodeBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
   if (event.target.value.length === 0) {
@@ -108,39 +34,78 @@ const NodeComponent = (props: NodeActions) => {
     props.handleNodeUpdate(nextNode);
   };
 
+  const labelId = `checkbox-list-label-${props.node.text}`;
+  const { handleNodeComplete, handleNodeRemove, node } = props;
+
   return (
-    <NodeContainer>
-      <div onClick={() => props.handleNodeComplete(props.node.id)}>
-        {props.node.complete ? (
-          <span className="checked">&#x2714;</span>
-        ) : (
-          <span className="unchecked" />
-        )}
-      </div>
-
-      <div className="wrapper">
-        <input
-          value={props.node.text}
-          onBlur={handleNodeBlur}
-          onChange={handleNodeUpdate}
+    <ListItem
+      key={props.node.id}
+      role={undefined}
+      dense
+      button
+      // onClick={handleToggle(value)}
+    >
+      <ListItemIcon>
+        <Checkbox
+          edge="start"
+          checked={node.complete}
+          tabIndex={-1}
+          disableRipple
+          onClick={() => handleNodeComplete(node.id)}
+          inputProps={{ "aria-labelledby": labelId }}
         />
-      </div>
-
-      <div
-        className="add"
-        onClick={() => props.handleNodeAddSubNode(props.node.id)}
-      >
-        &#x02937;
-      </div>
-
-      <div
-        className="remove"
-        onClick={() => props.handleNodeRemove(props.node.id)}
-      >
-        &#x02A2F;
-      </div>
-    </NodeContainer>
+      </ListItemIcon>
+      {/* <ListItemText id={labelId} primary={node.text} /> */}
+      <TextField
+        placeholder="New node"
+        value={node.text}
+        onChange={handleNodeUpdate}
+        // onKeyPress={props.onInputKeyPress}
+        fullWidth
+      />
+      <ListItemSecondaryAction>
+        <IconButton
+          aria-label="Delete Node"
+          onClick={() => handleNodeRemove(node.id)}
+        >
+          <DeleteOutlined />
+        </IconButton>
+      </ListItemSecondaryAction>
+    </ListItem>
   );
 };
+
+//   <NodeContainer>
+//     <div onClick={() => props.handleNodeComplete(props.node.id)}>
+//       {props.node.complete ? (
+//         <span className="checked">&#x2714;</span>
+//       ) : (
+//         <span className="unchecked" />
+//       )}
+//     </div>
+
+//     <div className="wrapper">
+//       <input
+//         value={props.node.text}
+//         onBlur={handleNodeBlur}
+//         onChange={handleNodeUpdate}
+//       />
+//     </div>
+
+//     <div
+//       className="add"
+//       onClick={() => props.handleNodeAddSubNode(props.node.id)}
+//     >
+//       &#x02937;
+//     </div>
+
+//     <div
+//       className="remove"
+//       onClick={() => props.handleNodeRemove(props.node.id)}
+//     >
+//       &#x02A2F;
+//     </div>
+//   </NodeContainer>
+// );
 
 export default NodeComponent;

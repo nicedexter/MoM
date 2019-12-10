@@ -1,5 +1,4 @@
 import React, { useReducer, useContext } from "react";
-import styled from "styled-components";
 
 import AddNode, { Node } from "./AddNode";
 import Filter from "./Filter";
@@ -7,14 +6,6 @@ import { filterReducer, FilterState } from "../State/FilterReducer";
 import List from "./List";
 import { Action, Actions, NodeContext } from "../State/NodeContext";
 
-const NodeEditorContainer = styled.div`
-  padding-top: 32px;
-  margin-left: 32px;
-  width: 100%;
-  max-width: 480px;
-  display: flex;
-  flex-flow: column nowrap;
-`;
 
 const NodeBook = () => {
   const context = useContext(NodeContext);
@@ -43,11 +34,11 @@ const NodeBook = () => {
     (filteredNodes && filteredNodes.filter(n => n.parent === id)) || [];
 
   return (
-    <NodeEditorContainer>
+    <>
       <Filter dispatch={dispatchFilter} />
       <AddNode handleNodeCreate={handleNodeCreate} />
       <List nodes={filteredNodes} />
-    </NodeEditorContainer>
+    </>
   );
 };
 

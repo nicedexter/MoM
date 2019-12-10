@@ -1,10 +1,6 @@
 import React from "react";
 import { FilterAction } from "../State/FilterReducer";
-import styled from "styled-components";
-
-const FilterContainer = styled.div`
-  margin-bottom: 16px;
-`;
+import Button from "@material-ui/core/Button";
 
 const Filter = ({ dispatch }: { dispatch: React.Dispatch<FilterAction> }) => {
   const handleShowAll = () => {
@@ -17,17 +13,11 @@ const Filter = ({ dispatch }: { dispatch: React.Dispatch<FilterAction> }) => {
     dispatch({ type: "SHOW_INCOMPLETE" });
   };
   return (
-    <FilterContainer>
-      <button type="button" onClick={handleShowAll}>
-        Show All
-      </button>
-      <button type="button" onClick={handleShowComplete}>
-        Show Complete
-      </button>
-      <button type="button" onClick={handleShowIncomplete}>
-        Show Incomplete
-      </button>
-    </FilterContainer>
+    <>
+      <Button variant="contained" color="primary" onClick={handleShowAll}>Show All</Button>
+      <Button onClick={handleShowComplete}>Show Complete</Button>
+      <Button onClick={handleShowIncomplete}>Show Incomplete</Button>
+    </>
   );
 };
 

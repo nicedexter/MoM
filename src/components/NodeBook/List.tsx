@@ -1,35 +1,19 @@
+import List from "@material-ui/core/List";
+import { makeStyles } from "@material-ui/core/styles";
 import React, { useContext } from "react";
-import styled from "styled-components";
-
+import { Actions, NodeContext, nodeTemplate } from "../State/NodeContext";
 import { Node } from "./AddNode";
 import NodeComponent from "./Node";
-import { Actions, NodeContext, nodeTemplate } from "../State/NodeContext";
 
-const NodeEditorContainer = styled.div`
-  padding-top: 32px;
-  width: 100%;
-  max-width: 480px;
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
-`;
-
-const ElementsContainer = styled.div`
-  ul {
-    padding: 0;
-    margin: 0;
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: "100%",
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper
   }
+}));
 
-  ul:not(:first-child) {
-    margin-left: 1em;
-  }
-
-  li {
-    list-style-type: none;
-  }
-`;
-
-const NodeEditor = ({ nodes }: { nodes: Node[] | null}) => {
+const NodeEditor = ({ nodes }: { nodes: Node[] | null }) => {
   const context = useContext(NodeContext);
   const dispatch = context && context.dispatch;
 
@@ -55,39 +39,54 @@ const NodeEditor = ({ nodes }: { nodes: Node[] | null}) => {
 
   const rootNodes = nodes && nodes.filter((n: Node) => n.parent === null);
   const childNodes = (id: string): Node[] =>
-  nodes &&  nodes.filter((n: Node) => n.parent === id) || [];
+    (nodes && nodes.filter((n: Node) => n.parent === id)) || [];
+
+  const classes = useStyles();
+  const [checked, setChecked] = React.useState([0]);
 
   return (
-    <ElementsContainer>
-      <ul>
-        {rootNodes &&
-          rootNodes.map((node: Node) => (
-            <li key={node.id}>
-              <NodeComponent
-                node={node}
-                handleNodeUpdate={handleNodeUpdate}
-                handleNodeAddSubNode={handleNodeAddSubNode}
-                handleNodeRemove={handleNodeRemove}
-                handleNodeComplete={handleNodeToggleComplete}
-              />
-              {childNodes(node.id) &&
-                childNodes(node.id).map((node: Node) => (
-                  <ul>
-                    <li key={node.id}>
-                      <NodeComponent
-                        node={node}
-                        handleNodeUpdate={handleNodeUpdate}
-                        handleNodeAddSubNode={handleNodeAddSubNode}
-                        handleNodeRemove={handleNodeRemove}
-                        handleNodeComplete={handleNodeToggleComplete}
-                      />
-                    </li>
-                  </ul>
-                ))}
-            </li>
-          ))}
-      </ul>
-    </ElementsContainer>
+    <List className={classes.root}>
+      {rootNodes &&
+        rootNodes.map(node => (
+          <NodeComponent
+            node={node}
+            handleNodeUpdate={handleNodeUpdate}
+            handleNodeAddSubNode={handleNodeAddSubNode}
+            handleNodeRemove={handleNodeRemove}
+            handleNodeComplete={handleNodeToggleComplete}
+          />
+        ))}
+    </List>
+    // <ElementsContainer>
+    //   <ul>
+    //     {rootNodes &&
+    //       rootNodes.map((node: Node) => (
+    //         <li key={node.id}>
+    //           <NodeComponent
+    //             node={node}
+    //             handleNodeUpdate={handleNodeUpdate}
+    //             handleNodeAddSubNode={handleNodeAddSubNode}
+    //             handleNodeRemove={handleNodeRemove}
+    //             handleNodeComplete={handleNodeToggleComplete}
+    //           />
+    //           {childNodes(node.id) &&
+    //             childNodes(node.id).map((node: Node) => (
+    //               <ul>
+    //                 <li key={node.id}>
+    //                   <NodeComponent
+    //                     node={node}
+    //                     handleNodeUpdate={handleNodeUpdate}
+    //                     handleNodeAddSubNode={handleNodeAddSubNode}
+    //                     handleNodeRemove={handleNodeRemove}
+    //                     handleNodeComplete={handleNodeToggleComplete}
+    //                   />
+    //                 </li>
+    //               </ul>
+    //             ))}
+    //         </li>
+    //       ))}
+    //   </ul>
+    // </ElementsContainer>
   );
 };
 

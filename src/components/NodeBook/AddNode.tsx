@@ -1,6 +1,6 @@
 import * as React from "react";
 import shortid from "shortid";
-import styled from "styled-components";
+import { TextField, Paper } from "@material-ui/core";
 
 export interface Node {
   id: string;
@@ -9,17 +9,6 @@ export interface Node {
   complete: boolean;
 }
 
-const AddNodeContainer = styled.div`
-  input {
-    border: 1px solid #ccc;
-  }
-
-  input:focus {
-    outline: 0;
-    border: 1px solid #007bff;
-  }
-`;
-
 export interface NodeInput {
   handleNodeCreate: (node: Node) => void;
 }
@@ -27,7 +16,7 @@ export interface NodeInput {
 const AddNodeComponent = (props: NodeInput) => {
   const [text, setText] = React.useState("");
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value);
   };
 
@@ -41,21 +30,21 @@ const AddNodeComponent = (props: NodeInput) => {
       };
       props.handleNodeCreate(newNode);
     }
-    
+
     setText("");
     event.preventDefault();
   };
 
   return (
-    <AddNodeContainer>
-      <input
+    <Paper style={{ margin: 16, padding: 16 }}>
+      <TextField
         value={text}
-        type="text"
         placeholder="New node"
-        onChange={event => handleInputChange(event)}
+        fullWidth
+        onChange={handleInputChange}
         onKeyPress={event => event.key === "Enter" && handleInputEnter(event)}
       />
-    </AddNodeContainer>
+    </Paper>
   );
 };
 
