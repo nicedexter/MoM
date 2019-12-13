@@ -1,11 +1,11 @@
-import React, { useReducer, useContext } from "react";
+import React, { useContext, useReducer } from 'react';
 
-import AddNode, { Node } from "./AddNode";
-import Filter from "./Filter";
-import { filterReducer, FilterState } from "../State/FilterReducer";
-import List from "./List";
-import { Action, Actions, NodeContext } from "../State/NodeContext";
-
+import { filterReducer, FilterState } from '../State/FilterReducer';
+import { Action, Actions, NodeContext } from '../State/NodeContext';
+import AddNode, { Node } from './AddNode';
+import Drawer from './Drawer';
+import Filter from './Filter';
+import List from './List';
 
 const NodeBook = () => {
   const context = useContext(NodeContext);
@@ -35,7 +35,8 @@ const NodeBook = () => {
 
   return (
     <>
-      <Filter dispatch={dispatchFilter} />
+      <Drawer />
+      {/* <Filter dispatch={dispatchFilter} /> */}
       <AddNode handleNodeCreate={handleNodeCreate} />
       <List nodes={filteredNodes} />
     </>
