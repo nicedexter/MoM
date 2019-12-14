@@ -1,4 +1,3 @@
-// Import dependencies
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import ListItem from "@material-ui/core/ListItem";
@@ -74,38 +73,5 @@ const NodeComponent = (props: NodeActions) => {
     </ListItem>
   );
 };
-
-//   <NodeContainer>
-//     <div onClick={() => props.handleNodeComplete(props.node.id)}>
-//       {props.node.complete ? (
-//         <span className="checked">&#x2714;</span>
-//       ) : (
-//         <span className="unchecked" />
-//       )}
-//     </div>
-
-//     <div className="wrapper">
-//       <input
-//         value={props.node.text}
-//         onBlur={handleNodeBlur}
-//         onChange={handleNodeUpdate}
-//       />
-//     </div>
-
-//     <div
-//       className="add"
-//       onClick={() => props.handleNodeAddSubNode(props.node.id)}
-//     >
-//       &#x02937;
-//     </div>
-
-//     <div
-//       className="remove"
-//       onClick={() => props.handleNodeRemove(props.node.id)}
-//     >
-//       &#x02A2F;
-//     </div>
-//   </NodeContainer>
-// );
 
 export default NodeComponent;

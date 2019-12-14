@@ -1,22 +1,27 @@
-import React, { useContext, useReducer } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import AccountTree from "@material-ui/icons/AccountTree";
-import { Action, Actions, NodeContext } from "../State/NodeContext";
+import MenuIcon from "@material-ui/icons/Menu";
+import React, { useContext } from "react";
+import { NodeContext } from "../State/NodeContext";
 
-const useStyles = makeStyles({
-  fullList: {
-    width: "auto"
-  }
-});
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    menuButton: {
+      marginRight: theme.spacing(2)
+    },
+    fullList: {
+      width: "auto"
+    }
+  })
+);
 
-export default function TemporaryDrawer() {
+export default function Drawer() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -39,7 +44,15 @@ export default function TemporaryDrawer() {
 
   return (
     <div>
-      <Button onClick={toggleDrawer(true)}>Nodes</Button>
+      <IconButton
+        edge="start"
+        className={classes.menuButton}
+        color="inherit"
+        aria-label="menu"
+        onClick={toggleDrawer(true)}
+      >
+        <MenuIcon />
+      </IconButton>
       <SwipeableDrawer
         anchor="top"
         open={open}

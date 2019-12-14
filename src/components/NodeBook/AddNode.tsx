@@ -1,6 +1,6 @@
+import { Paper, TextField } from "@material-ui/core";
 import * as React from "react";
 import shortid from "shortid";
-import { TextField, Paper } from "@material-ui/core";
 
 export interface Node {
   id: string;
