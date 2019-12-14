@@ -10,6 +10,9 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     maxWidth: 360,
     backgroundColor: theme.palette.background.paper
+  },
+  sub: {
+    marginLeft: '16px'
   }
 }));
 
@@ -48,45 +51,28 @@ const NodeEditor = ({ nodes }: { nodes: Node[] | null }) => {
     <List className={classes.root}>
       {rootNodes &&
         rootNodes.map(node => (
-          <NodeComponent
-            node={node}
-            handleNodeUpdate={handleNodeUpdate}
-            handleNodeAddSubNode={handleNodeAddSubNode}
-            handleNodeRemove={handleNodeRemove}
-            handleNodeComplete={handleNodeToggleComplete}
-          />
+          <>
+            <NodeComponent
+              node={node}
+              handleNodeUpdate={handleNodeUpdate}
+              handleNodeAddSubNode={handleNodeAddSubNode}
+              handleNodeRemove={handleNodeRemove}
+              handleNodeComplete={handleNodeToggleComplete}
+            />
+            {childNodes(node.id) &&
+              childNodes(node.id).map((node: Node) => (
+                <List className={classes.sub}>
+                    <NodeComponent
+                      node={node}
+                      handleNodeUpdate={handleNodeUpdate}
+                      handleNodeRemove={handleNodeRemove}
+                      handleNodeComplete={handleNodeToggleComplete}
+                    />
+                  </List>
+              ))}
+          </>
         ))}
     </List>
-    // <ElementsContainer>
-    //   <ul>
-    //     {rootNodes &&
-    //       rootNodes.map((node: Node) => (
-    //         <li key={node.id}>
-    //           <NodeComponent
-    //             node={node}
-    //             handleNodeUpdate={handleNodeUpdate}
-    //             handleNodeAddSubNode={handleNodeAddSubNode}
-    //             handleNodeRemove={handleNodeRemove}
-    //             handleNodeComplete={handleNodeToggleComplete}
-    //           />
-    //           {childNodes(node.id) &&
-    //             childNodes(node.id).map((node: Node) => (
-    //               <ul>
-    //                 <li key={node.id}>
-    //                   <NodeComponent
-    //                     node={node}
-    //                     handleNodeUpdate={handleNodeUpdate}
-    //                     handleNodeAddSubNode={handleNodeAddSubNode}
-    //                     handleNodeRemove={handleNodeRemove}
-    //                     handleNodeComplete={handleNodeToggleComplete}
-    //                   />
-    //                 </li>
-    //               </ul>
-    //             ))}
-    //         </li>
-    //       ))}
-    //   </ul>
-    // </ElementsContainer>
   );
 };
 
