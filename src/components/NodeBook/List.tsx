@@ -45,7 +45,6 @@ const NodeEditor = ({ nodes }: { nodes: Node[] | null }) => {
     (nodes && nodes.filter((n: Node) => n.parent === id)) || [];
 
   const classes = useStyles();
-  const [checked, setChecked] = React.useState([0]);
 
   return (
     <List className={classes.root}>

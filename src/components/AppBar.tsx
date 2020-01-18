@@ -17,7 +17,7 @@ const Layout = memo(props => {
       <Toolbar>
         {props.children}
         <Typography color="inherit" className={classes.title}>
-          MoM APP - acyclical undirected graph notes
+          MoM, graph todo app
         </Typography>
       </Toolbar>
     </AppBar>

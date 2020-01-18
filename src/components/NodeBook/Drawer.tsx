@@ -27,7 +27,6 @@ export default function Drawer() {
 
   const context = useContext(NodeContext);
   const nodes = context && context.nodes;
-  const dispatch = context && context.dispatch;
 
   const rootNodes = nodes && nodes.filter(n => n.parent === null);
 
